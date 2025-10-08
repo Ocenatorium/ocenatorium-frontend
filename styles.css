@@ -1,0 +1,5 @@
+:root{font-family:system-ui,sans-serif}body{margin:0;padding:1rem}
+header{display:flex;gap:1rem;flex-wrap:wrap;align-items:baseline}
+.table{width:100%;border-collapse:collapse;margin-top:1rem}
+.table th,.table td{border:1px solid #ddd;padding:.5rem}
+.table th{background:#f6f6f6;text-align:left}
