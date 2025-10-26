@@ -32,3 +32,15 @@ function render(items) {
     ).textContent = `Błąd ładowania danych: ${e.message}`;
   }
 })();
+const btn = document.getElementById("infoBtn");
+const text = document.getElementById("infoText");
+
+btn.addEventListener("click", () => {
+  if (text.style.display === "none") {
+    text.style.display = "block";
+    btn.textContent = "❌ Ukryj informacje";
+  } else {
+    text.style.display = "none";
+    btn.textContent = "ℹ️ Pokaż informacje";
+  }
+});

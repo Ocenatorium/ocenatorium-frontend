@@ -1,0 +1,82 @@
+[
+  {
+    "email": "kp-ko@kluby.sejm.pl, prasowka@mail.platforma.org",
+    "fax": "(22) 694-26-36",
+    "id": "KO",
+    "membersCount": 157,
+    "name": "Klub Parlamentarny Koalicja Obywatelska - Platforma Obywatelska, Nowoczesna, Inicjatywa Polska, Zieloni",
+    "phone": ""
+  },
+  {
+    "email": "",
+    "fax": "(22) 694-29-31",
+    "id": "Konfederacja",
+    "membersCount": 16,
+    "name": "Klub Poselski Konfederacja",
+    "phone": ""
+  },
+  {
+    "email": "kolokkp@kluby.sejm.pl",
+    "fax": "(22) 694-26-24",
+    "id": "Konfederacja_KP",
+    "membersCount": 3,
+    "name": "Koło Poselskie Konfederacja Korony Polskiej",
+    "phone": ""
+  },
+  {
+    "email": "kp-lewica@kluby.sejm.pl",
+    "fax": "(22) 694-28-16",
+    "id": "Lewica",
+    "membersCount": 21,
+    "name": "Koalicyjny Klub Parlamentarny Lewicy (Nowa Lewica, PPS, Unia Pracy)",
+    "phone": ""
+  },
+  {
+    "email": "",
+    "fax": "(22) 694-15-34",
+    "id": "niez.",
+    "membersCount": 3,
+    "name": "Posłowie niezrzeszeni",
+    "phone": ""
+  },
+  {
+    "email": "kp-pis@kluby.sejm.pl",
+    "fax": "(22) 694-26-11",
+    "id": "PiS",
+    "membersCount": 188,
+    "name": "Klub Parlamentarny Prawo i Sprawiedliwość",
+    "phone": ""
+  },
+  {
+    "email": "kp-polska2050@kluby.sejm.pl",
+    "fax": "(22) 694-29-12",
+    "id": "Polska2050",
+    "membersCount": 31,
+    "name": "Klub Parlamentarny Polska 2050",
+    "phone": ""
+  },
+  {
+    "email": "kp-psl@kluby.sejm.pl",
+    "fax": "(22) 694 23 21 ",
+    "id": "PSL-TD",
+    "membersCount": 32,
+    "name": "Klub Parlamentarny Polskie Stronnictwo Ludowe - Trzecia Droga",
+    "phone": ""
+  },
+  {
+    "email": "",
+    "fax": "(22) 694-14-41",
+    "id": "Razem",
+    "membersCount": 5,
+    "name": "Koło Poselskie Razem",
+    "phone": ""
+  },
+  {
+    "email": "kp-wolnirepublikanie@kluby.sejm.pl",
+    "fax": "(22) 694-28-20, 798-454-016",
+    "id": "Republikanie",
+    "membersCount": 4,
+    "name": "Koło Poselskie Wolni Republikanie",
+    "phone": ""
+  }
+]
