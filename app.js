@@ -5,9 +5,12 @@ async function loadJSON(path) {
 }
 function render(items) {
   const root = document.getElementById("root");
-  root.innerHTML = `<table class="table"><thead><tr><th>Imie i nazwisko</th><th>Klub</th></tr></thead>
+  root.innerHTML = `<table class="table"><thead><tr><th>Imie i nazwisko</th><th> wykształcenie</th><th>Klub</th></tr></thead>
   <tbody>${items
-    .map((x) => `<tr><td>${x.name}</td><td>${x.club}</td></tr>`)
+    .map(
+      (x) =>
+        `<tr><td>${x.firstLastName}</td><td>${x.educationLevel}</td><td>${x.club}</td></tr>`
+    )
     .join("")}</tbody></table>`;
 }
 (async () => {
