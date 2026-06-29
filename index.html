@@ -2,29 +2,256 @@
 <html lang="pl">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Ocenatorium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ocenatorium Sejmowe</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header>
-      <h1>Ocenatorium - obserwacje</h1>
-      <p class="meta">Ostatnia aktualizacja: <span id="lastUpdate">—</span></p>
-      <button id="infoBtn">🔄 Pokaż Informacje</button>
-      <p id="infoText" style="display: none">
-        Ocenatorium to aplikacja do analizy danych o głosowaniach w Sejmie.
-        Używa plików JSON i wizualizacji, by pokazać aktywność posłów.
-      </p>
-    </header>
-    <section class="chart">
-      <h2>Profesje</h2>
-      <canvas
-        id="professionChart"
-        style="max-width: 1100px; margin: 16px 0"
-      ></canvas>
-    </section>
-    <main id="root"></main>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="page-frame">
+      <header class="site-header">
+        <nav class="site-nav" aria-label="Główna nawigacja">
+          <a href="#analizy" class="brand">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" focusable="false">
+                <path d="M6 16a10 10 0 0 1 20 0" />
+                <path d="M4 16h24" />
+                <path d="M8 18v7M13 18v7M19 18v7M24 18v7" />
+                <path d="M6 26h20" />
+              </svg>
+            </span>
+            <span>Ocenatorium Sejmowe</span>
+          </a>
+          <div class="nav-links">
+            <a href="#analizy" class="is-active">Analizy</a>
+            <a href="#o-projekcie">O projekcie</a>
+            <a href="#zrodla-danych">Źródła danych</a>
+          </div>
+        </nav>
+
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <h1 id="hero-title">Ocenatorium Sejmowe</h1>
+            <p class="lead">
+              Sejm pod lupą: zawody, wykształcenie, wiek, miejsca urodzenia i
+              doświadczenie posłów w kolejnych kadencjach.
+            </p>
+            <p class="sublead">
+              Analizy na podstawie publicznych danych Sejmu RP.
+            </p>
+            <div class="hero-actions">
+              <button
+                id="infoBtn"
+                class="button"
+                type="button"
+                aria-expanded="false"
+                aria-controls="infoText"
+              >
+                O projekcie i danych
+              </button>
+              <p class="meta">
+                Ostatnia aktualizacja:
+                <span id="lastUpdate">ustalana...</span>
+              </p>
+            </div>
+            <p id="infoText" class="info-panel" hidden>
+              Ocenatorium Sejmowe to niezależny projekt analityczny pokazujący
+              skład polskiego Sejmu w różnych przekrojach. Dane pochodzą z
+              publicznego API Sejmu RP, a analizy będą rozwijane etapami.
+            </p>
+          </div>
+
+          <div class="hero-art">
+            <img
+              src="./public/images/sejm-sketch.png"
+              alt="Szkic budynku Sejmu Rzeczypospolitej Polskiej"
+            />
+          </div>
+        </section>
+      </header>
+
+      <main>
+        <section id="analizy" class="section topics-section" aria-labelledby="topics-title">
+          <div class="section-heading">
+            <p class="eyebrow">ANALIZY</p>
+            <h2 id="topics-title">Wybierz interesujący Cię obszar</h2>
+            <p>
+              Zobacz Sejm w różnych przekrojach i sprawdź, jak zmieniał się
+              skład poselski w kadencjach 7–10.
+            </p>
+          </div>
+
+          <div class="topic-grid">
+            <a class="topic-card card-jobs" href="zawody.html">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                  <path d="M9 12V9h14v3" />
+                  <path d="M6 12h20v14H6z" />
+                  <path d="M6 18h20" />
+                  <path d="M13 18h6" />
+                </svg>
+              </span>
+              <span class="card-label">ZAWODY</span>
+              <h3>Politycy, prawnicy czy nauczyciele?</h3>
+              <p>
+                Jak zmieniał się udział różnych grup zawodowych w kadencjach
+                7–10?
+              </p>
+              <span class="card-link">Zobacz analizę →</span>
+            </a>
+
+            <a class="topic-card card-education" href="wyksztalcenie.html">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                  <path d="M4 12l12-6 12 6-12 6z" />
+                  <path d="M9 15v7c4 3 10 3 14 0v-7" />
+                </svg>
+              </span>
+              <span class="card-label">WYKSZTAŁCENIE</span>
+              <h3>Czy do Sejmu trzeba mieć wyższe wykształcenie?</h3>
+              <p>
+                Jak zmieniał się udział posłów z wykształceniem wyższym,
+                średnim i podstawowym?
+              </p>
+              <span class="card-link">Zobacz analizę →</span>
+            </a>
+
+            <a class="topic-card card-age" href="wiek.html">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                  <circle cx="16" cy="10" r="4" />
+                  <path d="M8 26c1-6 5-9 8-9s7 3 8 9" />
+                  <path d="M7 16a4 4 0 1 1 3-7M25 16a4 4 0 1 0-3-7" />
+                </svg>
+              </span>
+              <span class="card-label">WIEK</span>
+              <h3>Czy Sejm młodnieje, czy się starzeje?</h3>
+              <p>
+                Jak zmieniały się wiek i pokolenia posłów w kolejnych
+                kadencjach?
+              </p>
+              <span class="card-link">Zobacz analizę →</span>
+            </a>
+
+            <a class="topic-card card-experience" href="doswiadczenie.html">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                  <circle cx="16" cy="11" r="5" />
+                  <path d="M7 27c1.4-6.5 5.2-10 9-10s7.6 3.5 9 10" />
+                  <path d="M16 4v3M11 6l2 3M21 6l-2 3" />
+                </svg>
+              </span>
+              <span class="card-label">DOŚWIADCZENIE</span>
+              <h3>Nowe twarze czy stali bywalcy?</h3>
+              <p>
+                Ilu posłów debiutuje, a ilu zasiadało już w poprzednich
+                kadencjach?
+              </p>
+              <span class="card-link">Zobacz analizę →</span>
+            </a>
+
+            <a class="topic-card card-birthplace" href="miejsce-urodzenia.html">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                  <path d="M16 29s9-8 9-16a9 9 0 0 0-18 0c0 8 9 16 9 16z" />
+                  <circle cx="16" cy="13" r="3" />
+                </svg>
+              </span>
+              <span class="status-pill">W przygotowaniu</span>
+              <span class="card-label">MIEJSCE URODZENIA</span>
+              <h3>Skąd są posłowie?</h3>
+              <p>
+                Które miasta i regiony najczęściej pojawiają się jako miejsca
+                urodzenia posłów?
+              </p>
+              <span class="card-link">Zobacz analizę →</span>
+            </a>
+
+            <a class="topic-card card-committees" href="komisje.html">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                  <circle cx="16" cy="10" r="3" />
+                  <circle cx="9" cy="17" r="3" />
+                  <circle cx="23" cy="17" r="3" />
+                  <path d="M6 27c.8-4 3-6 6-6M14 27c.8-4 3-6 6-6M20 27c.8-4 3-6 6-6" />
+                </svg>
+              </span>
+              <span class="status-pill">W przygotowaniu</span>
+              <span class="card-label">KOMISJE</span>
+              <h3>Kto pracuje w komisjach sejmowych?</h3>
+              <p>
+                Jak wyglądają zawody, wiek, wykształcenie i doświadczenie
+                członków komisji?
+              </p>
+              <span class="card-link">Zobacz analizę →</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="support-section" aria-labelledby="support-title">
+          <span class="support-icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" focusable="false">
+              <path d="M8 12h14v7a7 7 0 0 1-7 7h0a7 7 0 0 1-7-7z" />
+              <path d="M22 14h2.5a3.5 3.5 0 0 1 0 7H22" />
+              <path d="M7 27h18" />
+              <path d="M12 5v3M17 4v4M22 5v3" />
+            </svg>
+          </span>
+          <div class="support-copy">
+            <p class="eyebrow">WESPRZYJ ROZWÓJ OCENATORIUM SEJMU</p>
+            <h2 id="support-title">Podoba Ci się Ocenatorium?</h2>
+            <p>
+              Pomóż uprościć dostęp do informacji o Sejmie. 
+              Chcę rozwijać kolejne analizy druków sejmowych oraz narzędzia, 
+              które ułatwią obywatelom wyszukiwanie i rozumienie informacji zawartych w dokumentach Sejmu.
+            </p>
+          </div>
+          <a
+            class="support-button"
+            href="[TUTAJ WSTAW LINK BUY ME A COFFEE]"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Kup mi kawkę ☕
+          </a>
+        </section>
+
+        <section id="o-projekcie" class="section info-section" aria-labelledby="project-title">
+          <div>
+            <p class="eyebrow">O PROJEKCIE</p>
+            <h2 id="project-title">O projekcie</h2>
+          </div>
+          <p>
+            Ocenatorium Sejmowe pokazuje dane o posłach w przystępnej,
+            wizualnej formie. Projekt pozwala porównywać kolejne kadencje oraz
+            obserwować zmiany w zawodach, poziomie wykształcenia, wieku i
+            doświadczeniu parlamentarzystów.
+          </p>
+        </section>
+
+        <section
+          id="zrodla-danych"
+          class="section info-section source-section"
+          aria-labelledby="source-title"
+        >
+          <div>
+            <p class="eyebrow">ŹRÓDŁA</p>
+            <h2 id="source-title">Źródło danych</h2>
+          </div>
+          <p>
+            Dane pochodzą z publicznego API Sejmu Rzeczypospolitej Polskiej.
+            Analizy mogą nie obejmować informacji, których posłowie nie podali w
+            swoich profilach.
+          </p>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <strong>Ocenatorium Sejmowe</strong>
+        <span>Dane: API Sejmu RP</span>
+        <span>Projekt analityczny w budowie</span>
+      </footer>
+    </div>
+
     <script src="./app.js" defer></script>
   </body>
 </html>
