@@ -3,8 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Zawody posłów | Ocenatorium Sejmowe</title>
+    <title>Kto rządził, a kto rządzi dziś? | Ocenatorium Sejmowe</title>
     <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
+    <script src="./zawody.js" defer></script>
   </head>
   <body class="page-shell">
     <header class="site-header">
@@ -20,15 +22,224 @@
     <main class="page-main">
       <a class="back-link" href="index.html#analizy">← Wróć do wszystkich analiz</a>
       <section class="page-intro">
-        <p class="eyebrow">ZAWODY</p>
-        <h1>Zawody posłów</h1>
-        <p>Analiza pokaże, które grupy zawodowe dominują w Sejmie i jak zmieniały się między kadencjami 7–10.</p>
-        <span class="prepare-badge">Analiza w przygotowaniu</span>
-        <div class="empty-panel">
-          <span class="empty-panel-symbol" aria-hidden="true">+</span>
-          <h2>Przyszła przestrzeń analizy</h2>
-          <p>Tu pojawią się wykresy, wnioski i porównania po przygotowaniu danych.</p>
+        <p class="eyebrow">ZAWODOWY SKŁAD SEJMU</p>
+        <h1>Kto rządził, a kto rządzi dziś?</h1>
+        <p>Nauczycie, politycy czy prawnicy  — jak zmieniał się skład zawodowy posłów w kolejnych kadencjach?</p>
+      </section>
+
+      <section class="profession-story-card" aria-labelledby="profession-race-title">
+        <div class="chart-section-header">
+          <p class="eyebrow">JAK ZMIENIAŁ SIĘ SEJM</p>
+          <h2 id="profession-race-title" class="chart-section-title">
+            Jak zmieniał się zawodowy skład Sejmu?
+          </h2>
+          <p class="chart-section-lead">
+            Zobacz, które grupy zawodowe zyskiwały, a które traciły miejsce
+            w kolejnych kadencjach.
+          </p>
         </div>
+
+        <div class="profession-race-current-term" aria-live="polite">
+          <span class="profession-race-term-number"></span>
+          <span class="profession-race-term-years"></span>
+        </div>
+
+        <div class="profession-race-wrapper">
+          <p id="professionRaceStatus" class="chart-status" role="status">Ładowanie animacji...</p>
+          <div
+            id="professionRaceChart"
+            class="profession-race-chart"
+            role="img"
+            aria-label="Animowany wykres pokazujący ważony udział grup zawodowych w kadencjach VII-X"
+          ></div>
+        </div>
+
+        <button type="button" id="professionRaceReplay" class="profession-race-replay">
+          ↻ Odtwórz ponownie
+        </button>
+      </section>
+
+      <section class="profession-chart-card" aria-labelledby="profession-chart-title">
+        <div class="chart-section-header">
+          <p class="eyebrow">GRUPY ZAWODOWE</p>
+          <h2 id="profession-chart-title" class="chart-section-title">
+            Grupy zawodowe posłów w kadencjach VII–X
+          </h2>
+        </div>
+
+        <div class="profession-chart-area">
+          <p id="professionChartStatus" class="chart-status" role="status">Ładowanie wykresu...</p>
+          <div
+            id="professionGroupsChart"
+            class="profession-chart"
+            role="img"
+            aria-label="Grupowany wykres kolumnowy pokazujący odsetek posłów w grupach zawodowych dla kadencji VII-X"
+          ></div>
+        </div>
+
+        <section class="profession-commentary" aria-label="Komentarz do wykresu">
+          <p class="eyebrow">CO WIDAĆ NA WYKRESIE</p>
+          <h3>Kilka rzeczy rzuca się w oczy</h3>
+
+          <div class="commentary-list">
+            <p>
+              <strong>Polityka wystrzeliła w IX kadencji.</strong>
+              To największy pojedynczy skok na wykresie — w tej kadencji grupa „Polityka”
+              wyraźnie wybija się ponad pozostałe.
+            </p>
+
+            <p>
+              <strong>X kadencja jest bardziej zróżnicowana.</strong>
+              Mocniej widać biznes, edukację, prawo i sektor publiczny. Żadna z tych grup
+              nie dominuje tak wyraźnie jak „Polityka” w IX kadencji.
+            </p>
+
+            <p>
+              <strong>Prawnicy mocniej wchodzą do gry.</strong>
+              W obecnej kadencji grupa prawnicza należy do zawodowej czołówki Sejmu.
+            </p>
+
+            <p>
+              <strong>Zdrowie ma niewielką reprezentację.</strong>
+              Zawody medyczne i zdrowotne są widoczne, ale należą do mniejszych grup.
+              W kolejnych kadencjach ich udział raczej lekko maleje niż rośnie.
+            </p>
+
+            <p>
+              <strong>Techniczne zaplecze nadal w tle.</strong>
+              Mimo cyfryzacji państwa, osoby z zapleczem technicznym i IT pozostają
+              w Sejmie mniejszością.
+            </p>
+          </div>
+        </section>
+
+        <section class="profession-other-note" aria-label="Co zawiera kategoria Inne">
+          <h3>Co wpada do kategorii „Inne”?</h3>
+          <p>
+            „Inne” obejmuje zawody rzadkie, trudne do przypisania do głównych grup albo
+            zbyt małe, żeby pokazywać je osobno na wykresie.
+          </p>
+          <ul>
+            <li>rolnictwo i środowisko, np. rolnicy, ogrodnicy, leśnicy, zootechnicy, technolodzy żywności,</li>
+            <li>osoby opisane ogólnie, np. emeryci, działacze społeczni, pracownicy biurowi,</li>
+            <li>pojedyncze specjalizacje, które nie tworzą większej grupy porównawczej.</li>
+          </ul>
+        </section>
+
+        <section class="profession-donuts" aria-labelledby="profession-donuts-title">
+          <div class="chart-section-header">
+            <p class="eyebrow">STRUKTURA WAŻONA</p>
+            <h2 id="profession-donuts-title" class="chart-section-title">
+              Kto zajmował najwięcej ławek w sejmie?
+            </h2>
+            <div class="donut-lead-lines">
+              <p>
+                <strong>
+                  W VII i VIII kadencji największy udział miała grupa
+                  <span class="group-highlight group-education">„Edukacja i nauka”</span>.
+                </strong>
+              </p>
+              <p>
+                <strong>
+                  W IX kadencji wyraźnie przeważali przedstawiciele grupy
+                  <span class="group-highlight group-politics">„Polityka”</span>.
+                </strong>
+              </p>
+              <p>
+                <strong>
+                  W X kadencji układ jest bardziej wyrównany — wysoko są
+                  <span class="group-highlight group-education">edukacja</span>,
+                  <span class="group-highlight group-business">biznes</span>
+                  i
+                  <span class="group-highlight group-law">prawo</span>.
+                </strong>
+              </p>
+            </div>
+            <p class="donut-lead-note">
+              Każde kółko pokazuje TOP 5 grup zawodowych oraz kategorię „Pozostałe”.
+              Udziały są ważone: jeśli poseł miał zawody z kilku grup, jego udział został
+              podzielony między te grupy. Dokładne wartości procentowe znajdują się
+              w rankingu pod wykresem.
+            </p>
+          </div>
+
+          <div class="donut-visuals">
+            <p id="professionDonutsStatus" class="donut-status" role="status">
+              Ładowanie wykresów kołowych...
+            </p>
+
+            <div class="donut-grid">
+              <article class="donut-card">
+                <h3>Kadencja VII</h3>
+                <p class="donut-term-meta">2011–2015 · PO–PSL</p>
+                <p class="donut-leading-group-badge"><span>Największy udział:</span> Edukacja i nauka</p>
+                <div
+                  id="professionDonutTerm7"
+                  class="profession-donut-chart"
+                  role="img"
+                  aria-label="Ważona struktura grup zawodowych w kadencji VII"
+                ></div>
+                <ul id="professionDonutLegendTerm7" class="donut-top-list"></ul>
+              </article>
+
+              <article class="donut-card">
+                <h3>Kadencja VIII</h3>
+                <p class="donut-term-meta">2015–2019 · Zjednoczona Prawica</p>
+                <p class="donut-leading-group-badge"><span>Największy udział:</span> Edukacja i nauka</p>
+                <div
+                  id="professionDonutTerm8"
+                  class="profession-donut-chart"
+                  role="img"
+                  aria-label="Ważona struktura grup zawodowych w kadencji VIII"
+                ></div>
+                <ul id="professionDonutLegendTerm8" class="donut-top-list"></ul>
+              </article>
+
+              <article class="donut-card">
+                <h3>Kadencja IX</h3>
+                <p class="donut-term-meta">2019–2023 · Zjednoczona Prawica</p>
+                <p class="donut-leading-group-badge"><span>Największy udział:</span> Polityka</p>
+                <div
+                  id="professionDonutTerm9"
+                  class="profession-donut-chart"
+                  role="img"
+                  aria-label="Ważona struktura grup zawodowych w kadencji IX"
+                ></div>
+                <ul id="professionDonutLegendTerm9" class="donut-top-list"></ul>
+              </article>
+
+              <article class="donut-card">
+                <h3>Kadencja X</h3>
+                <p class="donut-term-meta">2023–2027 · KO–Polska 2050–PSL–Lewica</p>
+                <p class="donut-leading-group-badge"><span>Największy udział:</span> Edukacja i nauka</p>
+                <div
+                  id="professionDonutTerm10"
+                  class="profession-donut-chart"
+                  role="img"
+                  aria-label="Ważona struktura grup zawodowych w kadencji X"
+                ></div>
+                <ul id="professionDonutLegendTerm10" class="donut-top-list"></ul>
+              </article>
+            </div>
+          </div>
+
+          <p class="donut-method-note">
+            To inny sposób liczenia niż na wykresie słupkowym. Słupki pokazują
+            występowanie grup, a kółka pokazują strukturę ważoną, która sumuje się
+            do 100%. Jeśli poseł miał zawody z kilku grup, jego udział został podzielony
+            równo między te grupy.
+          </p>
+        </section>
+
+        <details class="chart-methodology">
+          <summary>Jak czytać wykres?</summary>
+          <p>
+            Odsetki obliczono wśród wszystkich osób sprawujących mandat w danej kadencji,
+            dla których podano zawód. Jeden poseł może być przypisany do więcej niż jednej
+            grupy zawodowej, dlatego udziały grup nie muszą sumować się do 100%. Kategoria
+            „Inne” obejmuje zawody nieprzypisane do głównych grup.
+          </p>
+        </details>
       </section>
     </main>
     <footer class="site-footer">
