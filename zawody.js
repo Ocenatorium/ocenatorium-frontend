@@ -111,7 +111,9 @@ const raceTermNumberElement = document.querySelector(".profession-race-term-numb
 const raceTermYearsElement = document.querySelector(".profession-race-term-years");
 const VALUE_ANIMATION_DURATION = 3000;
 const RANK_MOVE_DURATION = 1800;
-const TERM_PAUSE = 1200;
+const INITIAL_TERM_PAUSE = 2000;
+const READY_TERM_PAUSE = 2000;
+const FINAL_TERM_PAUSE = 2500;
 let weightedRowsPromise;
 
 function showLoadingStatus(message) {
@@ -539,7 +541,7 @@ async function initProfessionRace() {
         return;
       }
 
-      await wait(1500);
+      await wait(INITIAL_TERM_PAUSE);
       if (runId !== animationRunId) {
         return;
       }
@@ -551,6 +553,8 @@ async function initProfessionRace() {
         const targetOrder = getProfessionRaceOrder(nextTerm, dataset);
         const fromValues = getProfessionRaceValues(previousTerm, order, dataset);
         const toValues = getProfessionRaceValues(nextTerm, order, dataset);
+
+        setProfessionRaceTerm(nextTerm);
         const valuesCompleted = await animateBarValues(
           chart,
           order,
@@ -578,8 +582,11 @@ async function initProfessionRace() {
           return;
         }
 
-        setProfessionRaceTerm(nextTerm);
-        await wait(TERM_PAUSE);
+        await wait(
+          termIndex === TERM_ORDER.length - 1
+            ? FINAL_TERM_PAUSE
+            : READY_TERM_PAUSE,
+        );
         if (runId !== animationRunId) {
           return;
         }
