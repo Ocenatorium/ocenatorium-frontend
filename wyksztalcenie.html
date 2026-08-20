@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Poziom wykształcenia posłów | Ocenatorium Sejmowe</title>
+    <title>Wykształcenie posłów | Ocenatorium Sejmowe</title>
+    <link rel="icon" href="data:," />
     <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
+    <script src="./wyksztalcenie.js" defer></script>
   </head>
   <body class="page-shell">
     <header class="site-header">
@@ -19,16 +22,149 @@
     </header>
     <main class="page-main">
       <a class="back-link" href="index.html#analizy">← Wróć do wszystkich analiz</a>
+
       <section class="page-intro">
-        <p class="eyebrow">WYKSZTAŁCENIE</p>
-        <h1>Poziom wykształcenia posłów</h1>
-        <p>Analiza porówna udział posłów z wykształceniem wyższym, średnim i podstawowym w kolejnych kadencjach.</p>
-        <span class="prepare-badge">Analiza w przygotowaniu</span>
-        <div class="empty-panel">
-          <span class="empty-panel-symbol" aria-hidden="true">+</span>
-          <h2>Przyszła przestrzeń analizy</h2>
-          <p>Tu pojawią się wykresy, wnioski i porównania po przygotowaniu danych.</p>
+        <p class="eyebrow">WYKSZTAŁCENIE POSŁÓW</p>
+        <h1>Czy do Sejmu trzeba mieć wyższe wykształcenie?</h1>
+        <p>
+          W ostatnich czterech kadencjach zdecydowana większość posłów z podanym
+          wykształceniem miała wykształcenie wyższe. Sprawdź, jak wyglądał cały
+          Sejm i czy największe kluby różniły się między sobą.
+        </p>
+      </section>
+
+      <section class="education-chart-card" aria-labelledby="education-terms-title">
+        <div class="chart-section-header">
+          <p class="eyebrow">CAŁY SEJM</p>
+          <h2 id="education-terms-title" class="chart-section-title">
+            Jak wykształceni byli posłowie?
+          </h2>
+          <p class="chart-section-lead">
+            Wyższe wykształcenie zdecydowanie dominuje w każdej z analizowanych kadencji.
+          </p>
         </div>
+
+        <div class="education-chart-area">
+          <p id="educationTermsStatus" class="chart-status" role="status">Ładowanie wykresu...</p>
+          <div
+            id="educationTermsChart"
+            class="education-terms-chart"
+            role="img"
+            aria-label="Poziomy wykształcenia posłów w kadencjach VII-X"
+          ></div>
+        </div>
+        <button type="button" id="educationTermsReplay" class="education-terms-replay">
+          Powtórz animację
+        </button>
+
+        <div class="education-callouts" aria-live="polite">
+          <article class="education-callout">
+            <strong id="educationOverNinetyValue">Ponad 90%</strong>
+            <p>
+              W każdej z kadencji VII–X ponad 90% posłów z podanym wykształceniem
+              miało wykształcenie wyższe.
+            </p>
+          </article>
+          <article class="education-callout">
+            <strong id="educationTopTermValue">X kadencja</strong>
+            <p>
+              To kadencja z najwyższym udziałem posłów z wyższym wykształceniem.
+            </p>
+          </article>
+        </div>
+
+        <section class="education-commentary profession-commentary" aria-label="Komentarz do wykresu">
+          <p class="eyebrow">CO WIDAĆ NA WYKRESIE</p>
+          <h3>Sejm jest bardzo dobrze wykształcony</h3>
+          <div class="commentary-list">
+            <p>
+              <strong>Wyższe wykształcenie zdecydowanie dominuje.</strong>
+              W każdej analizowanej kadencji ponad 90% posłów ze znanym poziomem
+              wykształcenia miało wykształcenie wyższe.
+            </p>
+            <p>
+              <strong>X kadencja wyróżnia się najbardziej.</strong>
+              Ma najwyższy udział posłów z wyższym wykształceniem spośród kadencji VII–X.
+            </p>
+            <p>
+              <strong>Średnie wykształcenie to niewielka część Sejmu.</strong>
+              Jego udział jest kilkuprocentowy.
+            </p>
+            <p>
+              <strong>Zasadnicze zawodowe to pojedyncze przypadki.</strong>
+              Nie wyciągaj dużych wniosków trendowych z tej grupy.
+            </p>
+            <p>
+              <strong>Braki danych są niewielkie.</strong>
+              Pokazujemy je jawnie, żeby nie ukrywać jakości danych.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <section class="education-chart-card education-clubs-card" aria-labelledby="education-clubs-title">
+        <div class="chart-section-header">
+          <p class="eyebrow">KLUBY PARLAMENTARNE</p>
+          <h2 id="education-clubs-title" class="chart-section-title">
+            Wyższe wykształcenie w klubach
+          </h2>
+          <p class="chart-section-lead">
+            Gdzie odsetek posłów z wyższym wykształceniem był najwyższy?
+            Porównujemy udział posłów z wyższym wykształceniem wśród osób,
+            dla których poziom wykształcenia jest znany.
+          </p>
+        </div>
+
+        <div class="education-term-filter">
+          <p class="education-filter-hint">Wybierz kadencję — ranking poniżej zaktualizuje się automatycznie.</p>
+          <div class="education-term-tabs" aria-label="Wybierz kadencję">
+            <button class="education-term-tab" type="button" data-term="7" aria-pressed="false">VII</button>
+            <button class="education-term-tab" type="button" data-term="8" aria-pressed="false">VIII</button>
+            <button class="education-term-tab" type="button" data-term="9" aria-pressed="false">IX</button>
+            <button class="education-term-tab is-active" type="button" data-term="10" aria-pressed="true">X</button>
+          </div>
+
+          <p id="educationCurrentTerm" class="education-current-term" aria-live="polite">
+            Kadencja X · 2023–2027
+          </p>
+        </div>
+
+        <div class="education-ranking-panel">
+          <p id="educationRankingStatus" class="chart-status" role="status">Ładowanie rankingu...</p>
+          <p id="educationRankingInsight" class="education-ranking-insight" aria-live="polite"></p>
+          <div
+            id="educationHigherRanking"
+            class="education-higher-ranking"
+            role="img"
+            aria-label="Ranking największych klubów według udziału posłów z wyższym wykształceniem"
+          ></div>
+          <p class="education-panel-method-note">
+            Liczby obejmują wszystkie osoby, które sprawowały mandat w trakcie danej kadencji,
+            także jeśli pełniły go tylko przez jej część.
+          </p>
+        </div>
+
+        <p class="education-chart-caption">
+          Pokazano pięć największych klubów parlamentarnych w wybranej kadencji oraz
+          zbiorczą grupę pozostałych klubów. Pięć głównych klubów jest sortowanych według
+          udziału posłów z wyższym wykształceniem.
+        </p>
+
+        <p id="educationOtherClubsList" class="education-other-clubs" aria-live="polite"></p>
+
+        <details class="chart-methodology">
+          <summary>Jak czytać ranking?</summary>
+          <ul>
+            <li>Dane pochodzą z API Sejmu RP.</li>
+            <li>Analiza obejmuje wszystkie osoby sprawujące mandat w danej kadencji, zgodnie z przygotowanym zbiorem danych.</li>
+            <li>Poziomy „średnie ogólne”, „średnie zawodowe” oraz „średnie policealne/pomaturalne” zostały połączone w kategorię „Średnie”.</li>
+            <li>Puste wartości są pokazywane jako „Brak danych”.</li>
+            <li>Pierwszy wykres pokazuje pełne 100% składu kadencji.</li>
+            <li>Informacja o udziale wyższego wykształcenia w komentarzach jest liczona wśród osób, dla których poziom wykształcenia jest znany.</li>
+            <li>Ranking klubów pokazuje udział posłów z wyższym wykształceniem wśród osób ze znanym poziomem wykształcenia w danym klubie.</li>
+            <li>Analiza obejmuje wszystkie osoby, które sprawowały mandat w danej kadencji, także jeśli sprawowały go tylko przez część kadencji.</li>
+          </ul>
+        </details>
       </section>
     </main>
     <footer class="site-footer">

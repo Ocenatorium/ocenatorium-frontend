@@ -111,9 +111,9 @@ const raceTermNumberElement = document.querySelector(".profession-race-term-numb
 const raceTermYearsElement = document.querySelector(".profession-race-term-years");
 const VALUE_ANIMATION_DURATION = 3000;
 const RANK_MOVE_DURATION = 1800;
-const INITIAL_TERM_PAUSE = 2000;
-const READY_TERM_PAUSE = 2000;
-const FINAL_TERM_PAUSE = 2500;
+const INITIAL_TERM_PAUSE = 5000;
+const READY_TERM_PAUSE = 5000;
+const FINAL_TERM_PAUSE = 5000;
 let weightedRowsPromise;
 
 function showLoadingStatus(message) {
