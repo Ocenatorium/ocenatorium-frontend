@@ -7,6 +7,7 @@
     <link rel="icon" href="data:," />
     <link rel="stylesheet" href="./styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
+    <script src="./analysis-animation-controls.js" defer></script>
     <script src="./wyksztalcenie.js" defer></script>
   </head>
   <body class="page-shell">
@@ -25,7 +26,7 @@
 
       <section class="page-intro">
         <p class="eyebrow">WYKSZTAŁCENIE POSŁÓW</p>
-        <h1>Czy do Sejmu trzeba mieć wyższe wykształcenie?</h1>
+        <h1 class="page-title">Czy do Sejmu trzeba mieć wyższe wykształcenie?</h1>
         <p>
           W ostatnich czterech kadencjach zdecydowana większość posłów z podanym
           wykształceniem miała wykształcenie wyższe. Sprawdź, jak wyglądał cały
@@ -34,14 +35,36 @@
       </section>
 
       <section class="education-chart-card" aria-labelledby="education-terms-title">
-        <div class="chart-section-header">
-          <p class="eyebrow">CAŁY SEJM</p>
-          <h2 id="education-terms-title" class="chart-section-title">
-            Jak wykształceni byli posłowie?
+        <div class="analysis-header">
+          <p class="analysis-eyebrow">CAŁY SEJM</p>
+          <h2 id="education-terms-title" class="analysis-title">
+            Jak wykształceni byli i są posłowie?
           </h2>
-          <p class="chart-section-lead">
-            Wyższe wykształcenie zdecydowanie dominuje w każdej z analizowanych kadencji.
-          </p>
+          <article
+            id="educationTermsConclusion"
+            class="education-terms-conclusion is-hidden"
+            hidden
+            aria-live="polite"
+          >
+            <strong id="educationOverNinetyValue">Ponad 90% w każdej kadencji</strong>
+            <p id="educationTermsConclusionText"></p>
+          </article>
+        </div>
+
+        <div class="analysis-animation-controls">
+          <div class="term-switcher">
+            <span class="term-switcher-label">Kadencja</span>
+            <div class="term-switcher-options" aria-label="Wybierz etap animacji wykształcenia">
+              <button class="term-button education-story-term-tab" type="button" data-term="7" aria-pressed="false">VII</button>
+              <button class="term-button education-story-term-tab" type="button" data-term="8" aria-pressed="false">VIII</button>
+              <button class="term-button education-story-term-tab" type="button" data-term="9" aria-pressed="false">IX</button>
+              <button class="term-button education-story-term-tab is-active" type="button" data-term="10" aria-pressed="true">X</button>
+            </div>
+          </div>
+          <div class="animation-actions">
+            <button type="button" id="educationTermsReplay" class="animation-action animation-replay">▶ Odtwórz ponownie</button>
+            <button type="button" id="educationTermsStop" class="animation-action animation-stop" disabled>■ Stop</button>
+          </div>
         </div>
 
         <div class="education-chart-area">
@@ -53,29 +76,9 @@
             aria-label="Poziomy wykształcenia posłów w kadencjach VII-X"
           ></div>
         </div>
-        <button type="button" id="educationTermsReplay" class="education-terms-replay">
-          Powtórz animację
-        </button>
-
-        <div class="education-callouts" aria-live="polite">
-          <article class="education-callout">
-            <strong id="educationOverNinetyValue">Ponad 90%</strong>
-            <p>
-              W każdej z kadencji VII–X ponad 90% posłów z podanym wykształceniem
-              miało wykształcenie wyższe.
-            </p>
-          </article>
-          <article class="education-callout">
-            <strong id="educationTopTermValue">X kadencja</strong>
-            <p>
-              To kadencja z najwyższym udziałem posłów z wyższym wykształceniem.
-            </p>
-          </article>
-        </div>
-
         <section class="education-commentary profession-commentary" aria-label="Komentarz do wykresu">
-          <p class="eyebrow">CO WIDAĆ NA WYKRESIE</p>
-          <h3>Sejm jest bardzo dobrze wykształcony</h3>
+          <p class="analysis-eyebrow">CO WIDAĆ NA WYKRESIE</p>
+          <h3 class="analysis-subtitle">Sejm jest bardzo dobrze wykształcony</h3>
           <div class="commentary-list">
             <p>
               <strong>Wyższe wykształcenie zdecydowanie dominuje.</strong>
@@ -103,12 +106,12 @@
       </section>
 
       <section class="education-chart-card education-clubs-card" aria-labelledby="education-clubs-title">
-        <div class="chart-section-header">
-          <p class="eyebrow">KLUBY PARLAMENTARNE</p>
-          <h2 id="education-clubs-title" class="chart-section-title">
+        <div class="analysis-header">
+          <p class="analysis-eyebrow">KLUBY PARLAMENTARNE</p>
+          <h2 id="education-clubs-title" class="analysis-title">
             Wyższe wykształcenie w klubach
           </h2>
-          <p class="chart-section-lead">
+          <p class="analysis-lead">
             Gdzie odsetek posłów z wyższym wykształceniem był najwyższy?
             Porównujemy udział posłów z wyższym wykształceniem wśród osób,
             dla których poziom wykształcenia jest znany.
@@ -116,12 +119,16 @@
         </div>
 
         <div class="education-term-filter">
-          <p class="education-filter-hint">Wybierz kadencję — ranking poniżej zaktualizuje się automatycznie.</p>
-          <div class="education-term-tabs" aria-label="Wybierz kadencję">
-            <button class="education-term-tab" type="button" data-term="7" aria-pressed="false">VII</button>
-            <button class="education-term-tab" type="button" data-term="8" aria-pressed="false">VIII</button>
-            <button class="education-term-tab" type="button" data-term="9" aria-pressed="false">IX</button>
-            <button class="education-term-tab is-active" type="button" data-term="10" aria-pressed="true">X</button>
+          <div class="term-switcher-actions">
+            <div class="term-switcher">
+              <span class="term-switcher-label">Kadencja</span>
+              <div class="term-switcher-options" aria-label="Wybierz kadencję">
+                <button class="term-button education-term-tab" type="button" data-term="7" aria-pressed="false">VII</button>
+                <button class="term-button education-term-tab" type="button" data-term="8" aria-pressed="false">VIII</button>
+                <button class="term-button education-term-tab" type="button" data-term="9" aria-pressed="false">IX</button>
+                <button class="term-button education-term-tab is-active" type="button" data-term="10" aria-pressed="true">X</button>
+              </div>
+            </div>
           </div>
 
           <p id="educationCurrentTerm" class="education-current-term" aria-live="polite">

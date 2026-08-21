@@ -6,6 +6,7 @@
     <title>Kto rządził, a kto rządzi dziś? | Ocenatorium Sejmowe</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
+    <script src="./analysis-animation-controls.js" defer></script>
     <script src="./zawody.js" defer></script>
   </head>
   <body class="page-shell">
@@ -23,20 +24,36 @@
       <a class="back-link" href="index.html#analizy">← Wróć do wszystkich analiz</a>
       <section class="page-intro">
         <p class="eyebrow">ZAWODOWY SKŁAD SEJMU</p>
-        <h1>Kto rządził, a kto rządzi dziś?</h1>
+        <h1 class="page-title">Kto rządził, a kto rządzi dziś?</h1>
         <p>Nauczycie, politycy czy prawnicy  — jak zmieniał się skład zawodowy posłów w kolejnych kadencjach?</p>
       </section>
 
       <section class="profession-story-card" aria-labelledby="profession-race-title">
-        <div class="chart-section-header">
-          <p class="eyebrow">JAK ZMIENIAŁ SIĘ SEJM</p>
-          <h2 id="profession-race-title" class="chart-section-title">
+        <div class="analysis-header">
+          <p class="analysis-eyebrow">JAK ZMIENIAŁ SIĘ SEJM</p>
+          <h2 id="profession-race-title" class="analysis-title">
             Jak zmieniał się zawodowy skład Sejmu?
           </h2>
-          <p class="chart-section-lead">
+          <p class="analysis-lead">
             Zobacz, które grupy zawodowe zyskiwały, a które traciły miejsce
             w kolejnych kadencjach.
           </p>
+        </div>
+
+        <div class="analysis-animation-controls">
+          <div class="term-switcher">
+            <span class="term-switcher-label">Kadencja</span>
+            <div class="term-switcher-options" aria-label="Wybierz kadencję animacji zawodów">
+              <button class="term-button profession-race-term-button" type="button" data-term="7" aria-pressed="true">VII</button>
+              <button class="term-button profession-race-term-button" type="button" data-term="8" aria-pressed="false">VIII</button>
+              <button class="term-button profession-race-term-button" type="button" data-term="9" aria-pressed="false">IX</button>
+              <button class="term-button profession-race-term-button" type="button" data-term="10" aria-pressed="false">X</button>
+            </div>
+          </div>
+          <div class="animation-actions">
+            <button type="button" id="professionRaceReplay" class="animation-action animation-replay">▶ Odtwórz ponownie</button>
+            <button type="button" id="professionRaceStop" class="animation-action animation-stop" disabled>■ Stop</button>
+          </div>
         </div>
 
         <div class="profession-race-current-term" aria-live="polite">
@@ -54,15 +71,12 @@
           ></div>
         </div>
 
-        <button type="button" id="professionRaceReplay" class="profession-race-replay">
-          ↻ Odtwórz ponownie
-        </button>
       </section>
 
       <section class="profession-chart-card" aria-labelledby="profession-chart-title">
-        <div class="chart-section-header">
-          <p class="eyebrow">GRUPY ZAWODOWE</p>
-          <h2 id="profession-chart-title" class="chart-section-title">
+        <div class="analysis-header">
+          <p class="analysis-eyebrow">GRUPY ZAWODOWE</p>
+          <h2 id="profession-chart-title" class="analysis-title">
             Grupy zawodowe posłów w kadencjach VII–X
           </h2>
         </div>
@@ -78,8 +92,8 @@
         </div>
 
         <section class="profession-commentary" aria-label="Komentarz do wykresu">
-          <p class="eyebrow">CO WIDAĆ NA WYKRESIE</p>
-          <h3>Kilka rzeczy rzuca się w oczy</h3>
+          <p class="analysis-eyebrow">CO WIDAĆ NA WYKRESIE</p>
+          <h3 class="analysis-subtitle">Kilka rzeczy rzuca się w oczy</h3>
 
           <div class="commentary-list">
             <p>
@@ -127,9 +141,9 @@
         </section>
 
         <section class="profession-donuts" aria-labelledby="profession-donuts-title">
-          <div class="chart-section-header">
-            <p class="eyebrow">STRUKTURA WAŻONA</p>
-            <h2 id="profession-donuts-title" class="chart-section-title">
+          <div class="analysis-header">
+            <p class="analysis-eyebrow">STRUKTURA WAŻONA</p>
+            <h2 id="profession-donuts-title" class="analysis-title">
               Kto zajmował najwięcej ławek w sejmie?
             </h2>
             <div class="donut-lead-lines">

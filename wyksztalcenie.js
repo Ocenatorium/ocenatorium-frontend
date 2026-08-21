@@ -41,6 +41,8 @@ const CLUBS_REQUIRED_COLUMNS = [
 
 const termsChartElement = document.getElementById("educationTermsChart");
 const termsReplayElement = document.getElementById("educationTermsReplay");
+const termsStopElement = document.getElementById("educationTermsStop");
+const storyTermTabs = Array.from(document.querySelectorAll(".education-story-term-tab"));
 const higherRankingElement = document.getElementById("educationHigherRanking");
 const termsStatusElement = document.getElementById("educationTermsStatus");
 const rankingStatusElement = document.getElementById("educationRankingStatus");
@@ -49,12 +51,15 @@ const currentTermElement = document.getElementById("educationCurrentTerm");
 const rankingInsightElement = document.getElementById("educationRankingInsight");
 const otherClubsElement = document.getElementById("educationOtherClubsList");
 const overNinetyElement = document.getElementById("educationOverNinetyValue");
-const topTermElement = document.getElementById("educationTopTermValue");
+const termsConclusionElement = document.getElementById("educationTermsConclusion");
+const termsConclusionTextElement = document.getElementById("educationTermsConclusionText");
 
 let clubsRows = [];
 let termsChart = null;
 let termsRows = [];
 let termsAnimationRunId = 0;
+let termsAnimationControls = null;
+let termsAnimationTargetTerm = "10";
 
 const TERMS_SEGMENT_DURATIONS = {
   Wyższe: 2400,
@@ -302,6 +307,22 @@ function buildTermsOption(rows, options = {}) {
       },
       data: groups,
     },
+    graphic: {
+      elements: [
+        {
+          type: "text",
+          left: isNarrow ? 28 : 42,
+          top: 42,
+          silent: true,
+          style: {
+            text: "Kadencja",
+            fill: "#6b7588",
+            font: `${isNarrow ? 11 : 12}px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`,
+            fontWeight: 750,
+          },
+        },
+      ],
+    },
     tooltip: {
       trigger: "item",
       confine: true,
@@ -432,18 +453,18 @@ function buildTermsOption(rows, options = {}) {
 function updateCallouts(rows) {
   const higherRows = rows.filter((row) => row.educationGroup === "Wyższe");
   const topRow = higherRows.reduce((best, row) => (
-    !best || row.shareKnownPercent > best.shareKnownPercent ? row : best
+    !best || row.shareAllPercent > best.shareAllPercent ? row : best
   ), null);
-  const allAboveNinety = higherRows.every((row) => row.shareKnownPercent > 90);
+  const allAboveNinety = higherRows.every((row) => row.shareAllPercent > 90);
 
   if (overNinetyElement) {
-    overNinetyElement.textContent = allAboveNinety ? "Ponad 90%" : formatPercent(
-      Math.min(...higherRows.map((row) => row.shareKnownPercent)),
-    );
+    overNinetyElement.textContent = allAboveNinety
+      ? "Ponad 90% w każdej kadencji"
+      : `Najwyżej ${topRow ? formatPercent(topRow.shareAllPercent) : ""}`;
   }
 
-  if (topTermElement && topRow) {
-    topTermElement.textContent = `${TERM_META[topRow.term].label} kadencja`;
+  if (termsConclusionTextElement && topRow) {
+    termsConclusionTextElement.textContent = `Wyższe wykształcenie zdecydowanie dominuje, a najwyższy udział widać w ${TERM_META[topRow.term].label} kadencji — ${formatPercent(topRow.shareAllPercent)}.`;
   }
 }
 
@@ -598,15 +619,6 @@ function buildRankingTooltip(row) {
   `;
 }
 
-function setTermsReplayDisabled(disabled) {
-  if (!termsReplayElement) {
-    return;
-  }
-
-  termsReplayElement.disabled = disabled;
-  termsReplayElement.setAttribute("aria-disabled", String(disabled));
-}
-
 function renderTermsFinal(animate = true) {
   if (!termsChart || termsRows.length === 0) {
     return;
@@ -618,6 +630,51 @@ function renderTermsFinal(animate = true) {
     animationDurationUpdate: animate ? 600 : 0,
     showLabels: true,
   }), true);
+}
+
+function renderTermsThrough(term) {
+  if (!termsChart || termsRows.length === 0) {
+    return;
+  }
+  termsAnimationTargetTerm = term;
+  termsAnimationControls?.setActiveTerm(term);
+  termsChart.setOption(buildTermsOption(termsRows, {
+    displayValues: getTermsDisplayValues(termsRows, term, EDUCATION_GROUPS.at(-1), 1),
+    animation: false,
+    animationDuration: 0,
+    animationDurationUpdate: 0,
+    showLabels: true,
+    animationCurrentTerm: term,
+    animationCurrentGroup: EDUCATION_GROUPS.at(-1),
+  }), true);
+  if (term === "10") showTermsConclusion();
+  else hideTermsConclusion();
+}
+
+function stopTermsStoryAnimation() {
+  termsAnimationRunId += 1;
+  renderTermsThrough(termsAnimationTargetTerm);
+  termsAnimationControls?.setPlaying(false);
+}
+
+function hideTermsConclusion() {
+  if (!termsConclusionElement) {
+    return;
+  }
+
+  termsConclusionElement.hidden = true;
+  termsConclusionElement.classList.add("is-hidden");
+}
+
+function showTermsConclusion() {
+  if (!termsConclusionElement) {
+    return;
+  }
+
+  termsConclusionElement.hidden = false;
+  requestAnimationFrame(() => {
+    termsConclusionElement.classList.remove("is-hidden");
+  });
 }
 
 function renderTermsAnimationFrame(term, group, progress, runId) {
@@ -670,12 +727,18 @@ async function playTermsStoryAnimation() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     termsAnimationRunId += 1;
     renderTermsFinal(false);
-    setTermsReplayDisabled(true);
+    termsAnimationTargetTerm = "10";
+    termsAnimationControls?.setActiveTerm("10");
+    showTermsConclusion();
+    termsAnimationControls?.setPlaying(false);
     return;
   }
 
   const runId = ++termsAnimationRunId;
-  setTermsReplayDisabled(true);
+  hideTermsConclusion();
+  termsAnimationControls?.setPlaying(true);
+  termsAnimationTargetTerm = "7";
+  termsAnimationControls?.setActiveTerm("7");
   termsChart.setOption(buildTermsOption(termsRows, {
     displayValues: getTermsDisplayValues(termsRows, "7", "Wyższe", 0),
     animation: false,
@@ -687,8 +750,13 @@ async function playTermsStoryAnimation() {
   }), true);
 
   await wait(TERMS_INITIAL_PAUSE);
+  if (runId !== termsAnimationRunId) {
+    return;
+  }
 
   for (const term of TERM_ORDER) {
+    termsAnimationTargetTerm = term;
+    termsAnimationControls?.setActiveTerm(term);
     for (const group of EDUCATION_GROUPS) {
       const completed = await animateTermsSegment(
         term,
@@ -709,7 +777,8 @@ async function playTermsStoryAnimation() {
   }
 
   renderTermsFinal(false);
-  setTermsReplayDisabled(false);
+  showTermsConclusion();
+  termsAnimationControls?.setPlaying(false);
 }
 
 function renderTermsChart(rows) {
@@ -719,7 +788,18 @@ function renderTermsChart(rows) {
 
   termsRows = rows;
   termsChart = window.echarts.init(termsChartElement, null, { renderer: "svg" });
-  termsReplayElement?.addEventListener("click", playTermsStoryAnimation);
+  termsAnimationControls = window.AnalysisAnimationControls?.create({
+    buttons: storyTermTabs,
+    replayButton: termsReplayElement,
+    stopButton: termsStopElement,
+    onSelect: (term) => {
+      termsAnimationRunId += 1;
+      renderTermsThrough(term);
+      termsAnimationControls?.setPlaying(false);
+    },
+    onStop: stopTermsStoryAnimation,
+    onReplay: playTermsStoryAnimation,
+  });
   window.addEventListener("resize", () => {
     renderTermsFinal(false);
     termsChart.resize();

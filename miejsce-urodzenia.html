@@ -4,7 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Miejsca urodzenia posłów | Ocenatorium Sejmowe</title>
+    <link rel="icon" href="data:," />
     <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
+    <script src="./analysis-animation-controls.js" defer></script>
+    <script src="./miejsce-urodzenia.js" defer></script>
   </head>
   <body class="page-shell">
     <header class="site-header">
@@ -17,20 +21,127 @@
         </div>
       </nav>
     </header>
+
     <main class="page-main">
       <a class="back-link" href="index.html#analizy">← Wróć do wszystkich analiz</a>
-      <section class="page-intro">
-        <p class="eyebrow">MIEJSCE URODZENIA</p>
-        <h1>Miejsca urodzenia posłów</h1>
-        <p>Analiza będzie dotyczyć miejsc urodzenia posłów, a nie okręgów wyborczych.</p>
-        <span class="prepare-badge">Analiza w przygotowaniu</span>
-        <div class="empty-panel">
-          <span class="empty-panel-symbol" aria-hidden="true">+</span>
-          <h2>Przyszła przestrzeń analizy</h2>
-          <p>Tu pojawią się wykresy, wnioski i porównania po przygotowaniu danych.</p>
+
+      <section class="page-intro birthplace-intro">
+        <p class="eyebrow">MIEJSCA URODZENIA POSŁÓW</p>
+        <h1 class="page-title">Skąd pochodzili i pochodzą posłowie?</h1>
+        <p>
+          Analiza pokazuje miejsca urodzenia osób, które sprawowały mandat
+          w kadencjach VII–X.
+        </p>
+        <p class="birthplace-intro-note">
+          Każda kadencja obejmuje wszystkie osoby, które sprawowały mandat
+          w jej trakcie, także jeśli pełniły go tylko przez część kadencji.
+        </p>
+      </section>
+
+      <section class="birthplace-card" aria-label="Wizualizacje miejsc urodzenia posłów">
+        <div class="birthplace-ranking-panel">
+          <div class="analysis-header">
+            <p class="analysis-eyebrow">RANKING TOP 10</p>
+            <div class="birthplace-title-row">
+              <h2 id="birthplace-title" class="analysis-title">
+                Najpopularniejsze miasta urodzenia posłów
+              </h2>
+              <span class="birthplace-methodology-info">
+                <button
+                  id="birthplaceMethodologyButton"
+                  class="birthplace-info-button"
+                  type="button"
+                  aria-label="Jak liczony jest ranking?"
+                  aria-expanded="false"
+                  aria-describedby="birthplaceMethodologyTooltip"
+                >i</button>
+                <span id="birthplaceMethodologyTooltip" class="birthplace-methodology-tooltip" role="tooltip">
+                  <span>Procent pokazuje udział osób urodzonych w danym mieście wśród wszystkich osób sprawujących mandat w tej kadencji.</span>
+                  <span>Analiza obejmuje wszystkie osoby, które sprawowały mandat w trakcie kadencji, także jeśli pełniły go tylko przez jej część.</span>
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <div class="analysis-animation-controls">
+            <div class="term-switcher">
+              <span class="term-switcher-label">Kadencja</span>
+              <div class="term-switcher-options" aria-label="Wybierz kadencję rankingu">
+                <button class="term-button birthplace-term-tab" type="button" data-term="7" aria-pressed="false">VII</button>
+                <button class="term-button birthplace-term-tab" type="button" data-term="8" aria-pressed="false">VIII</button>
+                <button class="term-button birthplace-term-tab" type="button" data-term="9" aria-pressed="false">IX</button>
+                <button class="term-button birthplace-term-tab is-active" type="button" data-term="10" aria-pressed="true">X</button>
+              </div>
+            </div>
+            <div class="animation-actions">
+              <button id="birthplaceReplay" class="animation-action animation-replay" type="button">▶ Odtwórz ponownie</button>
+              <button id="birthplaceStop" class="animation-action animation-stop" type="button" disabled>■ Stop</button>
+            </div>
+          </div>
+
+          <p id="birthplaceCurrentTerm" class="birthplace-live-term" aria-live="polite">Kadencja X</p>
+          <p id="birthplaceStatus" class="chart-status" role="status">Ładowanie danych...</p>
+          <div
+            id="birthplaceRanking"
+            class="birthplace-ranking"
+            role="list"
+            aria-label="Ranking dziesięciu najczęstszych miejsc urodzenia posłów"
+          ></div>
         </div>
+
+        <div class="birthplace-map-panel">
+          <div class="analysis-header">
+            <p class="analysis-eyebrow">MAPA POLSKI</p>
+            <h2 class="analysis-title">Gdzie urodzili się posłowie?</h2>
+          </div>
+
+          <div class="term-switcher-actions">
+            <div class="term-switcher">
+              <span class="term-switcher-label">Kadencja</span>
+              <div class="term-switcher-options" aria-label="Wybierz kadencję mapy">
+                <button class="term-button birthplace-map-term-tab" type="button" data-map-term="7" aria-pressed="false">VII</button>
+                <button class="term-button birthplace-map-term-tab" type="button" data-map-term="8" aria-pressed="false">VIII</button>
+                <button class="term-button birthplace-map-term-tab" type="button" data-map-term="9" aria-pressed="false">IX</button>
+                <button class="term-button birthplace-map-term-tab is-active" type="button" data-map-term="10" aria-pressed="true">X</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="birthplace-map-meta">
+            <p id="birthplaceMapCurrentTerm" class="birthplace-live-term" aria-live="polite">Kadencja X · 2023–2027</p>
+            <p id="birthplaceMapCount" class="birthplace-map-count" aria-live="polite"></p>
+          </div>
+          <div class="birthplace-map-legend" aria-label="Kategorie punktów na mapie">
+            <span><i class="is-top-five" aria-hidden="true"></i>TOP 5 miast</span>
+            <span><i class="is-over-one-percent" aria-hidden="true"></i>Miasta z udziałem &gt; 1%</span>
+            <span><i class="is-remaining" aria-hidden="true"></i>Pozostałe miasta</span>
+          </div>
+          <div
+            id="birthplaceMap"
+            class="birthplace-map"
+            role="img"
+            aria-label="Mapa Polski z kropkami oznaczającymi miejsca urodzenia posłów"
+          ></div>
+        </div>
+
+        <div class="birthplace-notes" aria-live="polite">
+          <p id="birthplaceForeignNote" hidden></p>
+          <p id="birthplaceMissingNote" hidden></p>
+        </div>
+
+        <details class="chart-methodology">
+          <summary>Jak czytać mapę?</summary>
+          <ul>
+            <li>Analizowane jest miejsce urodzenia podane w danych Sejmu.</li>
+            <li>Wielkość kropki odpowiada liczbie osób urodzonych w danym miejscu.</li>
+            <li>Analiza obejmuje wszystkie osoby, które sprawowały mandat w trakcie kadencji, także tylko przez jej część.</li>
+            <li>Osoby urodzone poza Polską nie są pokazane na mapie Polski.</li>
+            <li>Ranking TOP 10 pokazuje udział danego miasta względem wszystkich osób sprawujących mandat w danej kadencji.</li>
+          </ul>
+        </details>
       </section>
     </main>
+
     <footer class="site-footer">
       <strong>Ocenatorium Sejmowe</strong>
       <span>Dane: API Sejmu RP</span>

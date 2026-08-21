@@ -601,7 +601,7 @@ h3 {
   z-index: 1;
 }
 
-.page-intro h1 {
+.page-title {
   max-width: 1100px;
   font-size: clamp(3.1rem, 5.6vw, 5rem);
   line-height: 0.9;
@@ -673,71 +673,73 @@ h3 {
   font-size: 15px;
 }
 
-.profession-race-replay {
-  display: inline-flex;
-  min-height: 40px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 16px;
-  border: 1px solid rgba(15, 34, 71, 0.18);
-  border-radius: 9px;
-  background: #fffdf9;
-  color: #0f2247;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 800;
-  padding: 8px 13px;
-  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
-}
-
-.profession-race-replay:hover {
-  border-color: var(--coral);
-  background: #fff6e1;
-  transform: translateY(-2px);
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .profession-race-replay {
+  .animation-action,
+  .term-button {
     transition: none;
   }
 
-  .profession-race-replay:hover {
+  .term-button:hover:not(:disabled) {
     transform: none;
   }
 
-  .education-terms-replay {
+  .education-terms-conclusion {
     transition: none;
   }
 
-  .education-terms-replay:hover:not(:disabled) {
+  .education-terms-conclusion.is-hidden {
     transform: none;
   }
 }
 
-.chart-section-header {
-  max-width: 760px;
-  margin-bottom: 1.4rem;
+.analysis-header {
+  max-width: 820px;
+  margin-bottom: 1.25rem;
 }
 
-.chart-section-header .eyebrow {
-  margin-bottom: 0.45rem;
+.analysis-eyebrow {
+  margin: 0 0 0.38rem;
+  color: var(--coral);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-transform: uppercase;
 }
 
-.chart-section-title {
+.analysis-title {
   margin: 0;
   color: #0f2247;
-  font-size: clamp(1.9rem, 3.6vw, 3rem);
-  line-height: 0.98;
-  letter-spacing: -0.035em;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 2.4vw, 2.35rem);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
 }
 
-.chart-section-lead {
+.analysis-subtitle {
+  margin: 0;
+  color: #0f2247;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.2rem, 1.7vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.analysis-lead {
   max-width: 720px;
-  margin: 0.8rem 0 0;
+  margin: 0.7rem 0 0;
   color: #536079;
-  font-size: 1.02rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.58;
+}
+
+.analysis-meta {
+  margin: 0.55rem 0 0;
+  color: #6b7588;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .chart-section-note {
@@ -862,11 +864,8 @@ h3 {
   padding: 1.35rem 1.5rem;
 }
 
-.profession-commentary h3 {
-  margin: 0 0 1rem;
-  color: #0f2247;
-  font-size: 1.35rem;
-  line-height: 1.2;
+.profession-commentary .analysis-subtitle {
+  margin-bottom: 1rem;
 }
 
 .commentary-list {
@@ -1200,33 +1199,39 @@ h3 {
   min-height: 430px;
 }
 
-.education-terms-replay {
-  display: inline-flex;
-  min-height: 40px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 16px;
-  border: 1px solid rgba(15, 34, 71, 0.18);
-  border-radius: 9px;
-  background: #fffdf9;
-  color: #0f2247;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 800;
-  padding: 8px 13px;
-  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+.education-terms-conclusion {
+  max-width: 780px;
+  margin: 1rem 0 0;
+  border-left: 4px solid rgba(184, 120, 58, 0.72);
+  border-radius: 14px;
+  background: rgba(255, 248, 235, 0.58);
+  opacity: 1;
+  padding: 0.95rem 1rem;
+  transform: translateY(0);
+  transition: opacity 520ms ease, transform 520ms ease;
 }
 
-.education-terms-replay:hover:not(:disabled) {
-  border-color: var(--coral);
-  background: #fff6e1;
-  transform: translateY(-2px);
+.education-terms-conclusion.is-hidden {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
-.education-terms-replay:disabled {
-  cursor: default;
-  opacity: 0.55;
+.education-terms-conclusion strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #9b5c28;
+  font-family: inherit;
+  font-size: clamp(1.12rem, 2.2vw, 1.45rem);
+  font-weight: 950;
+  line-height: 1.15;
+}
+
+.education-terms-conclusion p {
+  max-width: 720px;
+  margin: 0;
+  color: #536079;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .education-clubs-chart {
@@ -1284,21 +1289,83 @@ h3 {
   padding: 1rem 1.1rem;
 }
 
-.education-filter-hint {
-  margin: 0 0 0.7rem;
-  color: #536079;
-  font-size: 0.94rem;
-  line-height: 1.45;
-}
-
-.education-term-tabs {
+.term-switcher-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem;
-  margin: 0;
+  align-items: center;
+  gap: 0.7rem;
 }
 
-.education-term-tab {
+.analysis-animation-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.animation-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.animation-action {
+  min-height: 38px;
+  border: 1px solid rgba(15, 34, 71, 0.18);
+  border-radius: 9px;
+  background: rgba(255, 253, 249, 0.82);
+  color: #315f91;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 850;
+  padding: 0.45rem 0.85rem;
+  transition: background-color 160ms ease, border-color 160ms ease, opacity 160ms ease;
+}
+
+.animation-action:hover:not(:disabled),
+.animation-action:focus-visible:not(:disabled) {
+  border-color: #4e79a7;
+  background: rgba(78, 121, 167, 0.1);
+}
+
+.animation-action:focus-visible {
+  outline: 2px solid rgba(49, 95, 145, 0.25);
+  outline-offset: 2px;
+}
+
+.animation-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.term-switcher {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.term-switcher-label {
+  flex: 0 0 auto;
+  color: #536079;
+  font-size: 0.9rem;
+  font-weight: 850;
+}
+
+.term-switcher-options {
+  display: flex;
+  min-width: 0;
+  gap: 0.55rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding: 0.1rem;
+  scrollbar-width: thin;
+}
+
+.term-button {
+  flex: 0 0 auto;
   min-width: 54px;
   min-height: 38px;
   border: 1px solid rgba(15, 34, 71, 0.16);
@@ -1313,16 +1380,27 @@ h3 {
   transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
 
-.education-term-tab:hover {
+.term-button:hover:not(:disabled),
+.term-button:focus-visible:not(:disabled) {
   border-color: var(--coral);
   background: #fff6e1;
   transform: translateY(-1px);
 }
 
-.education-term-tab.is-active {
+.term-button:focus-visible {
+  outline: 2px solid rgba(178, 118, 61, 0.32);
+  outline-offset: 2px;
+}
+
+.term-button.is-active {
   border-color: #b2763d;
   background: #b2763d;
   color: #fffdf9;
+}
+
+.term-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 .education-current-term {
@@ -1508,6 +1586,318 @@ h3 {
   line-height: 1.5;
 }
 
+.birthplace-intro-note {
+  margin-top: 0.8rem;
+  color: #6b7588;
+  font-size: 0.96rem;
+}
+
+.birthplace-card {
+  position: relative;
+  margin-top: 28px;
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: var(--soft-shadow);
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.birthplace-ranking-panel,
+.birthplace-map-panel {
+  position: relative;
+  border: 1px solid rgba(15, 34, 71, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.66);
+  padding: clamp(16px, 3vw, 22px);
+}
+
+.birthplace-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.birthplace-methodology-info {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.birthplace-info-button {
+  display: inline-flex;
+  width: 1.65rem;
+  height: 1.65rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(78, 121, 167, 0.35);
+  border-radius: 50%;
+  background: rgba(78, 121, 167, 0.1);
+  color: #315f91;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.birthplace-info-button:hover,
+.birthplace-info-button:focus-visible {
+  border-color: #4e79a7;
+  outline: none;
+}
+
+.birthplace-methodology-tooltip,
+.birthplace-ranking-tooltip {
+  position: absolute;
+  z-index: 10;
+  display: grid;
+  gap: 0.45rem;
+  border: 1px solid rgba(15, 34, 71, 0.1);
+  border-radius: 12px;
+  background: #fffdf9;
+  box-shadow: 0 14px 34px rgba(15, 34, 71, 0.16);
+  color: #263b60;
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.45;
+  opacity: 0;
+  padding: 0.75rem 0.85rem;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 140ms ease, transform 140ms ease, visibility 140ms ease;
+  visibility: hidden;
+}
+
+.birthplace-methodology-tooltip {
+  top: calc(100% + 0.55rem);
+  left: 50%;
+  width: min(360px, calc(100vw - 48px));
+  transform: translate(-50%, 4px);
+}
+
+.birthplace-methodology-info:hover .birthplace-methodology-tooltip,
+.birthplace-methodology-info:focus-within .birthplace-methodology-tooltip,
+.birthplace-methodology-info.is-open .birthplace-methodology-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  visibility: visible;
+}
+
+.birthplace-ranking {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.birthplace-ranking-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.2rem minmax(190px, 0.3fr) minmax(0, 1fr) minmax(62px, auto);
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  border-radius: 14px;
+  padding: 0.65rem 0.75rem;
+  will-change: transform, opacity;
+}
+
+.birthplace-ranking-row.is-winner {
+  background: rgba(246, 225, 184, 0.28);
+}
+
+.birthplace-ranking-row:focus-visible {
+  outline: 2px solid rgba(78, 121, 167, 0.45);
+  outline-offset: 2px;
+}
+
+.birthplace-ranking-position {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(78, 121, 167, 0.13);
+  color: #0f2247;
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.birthplace-ranking-label {
+  min-width: 0;
+}
+
+.birthplace-ranking-label strong {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #0f2247;
+  font-size: 0.98rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.birthplace-ranking-track {
+  min-width: 0;
+  height: 22px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(78, 121, 167, 0.13);
+}
+
+.birthplace-ranking-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #4e79a7;
+  box-shadow: inset 0 -1px 0 rgba(15, 34, 71, 0.14);
+}
+
+.birthplace-ranking-row.is-winner .birthplace-ranking-position {
+  background: #315f91;
+  color: #fff;
+}
+
+.birthplace-ranking-row.is-winner .birthplace-ranking-fill {
+  background: #315f91;
+}
+
+.birthplace-ranking-value {
+  color: #0f2247;
+  font-size: 0.98rem;
+  font-weight: 950;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.birthplace-ranking-tooltip {
+  left: clamp(3rem, 22%, 13rem);
+  bottom: calc(100% - 0.35rem);
+  width: min(310px, calc(100% - 4rem));
+}
+
+.birthplace-ranking-tooltip strong,
+.birthplace-ranking-tooltip span {
+  display: block;
+}
+
+.birthplace-ranking-row:hover .birthplace-ranking-tooltip,
+.birthplace-ranking-row:focus .birthplace-ranking-tooltip,
+.birthplace-ranking-row:focus-within .birthplace-ranking-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.birthplace-empty {
+  margin: 0;
+  color: #536079;
+  font-weight: 800;
+}
+
+.birthplace-map-panel {
+  margin-top: 1rem;
+}
+
+.birthplace-ranking-panel .term-switcher-actions,
+.birthplace-map-panel .term-switcher-actions {
+  margin-bottom: 1rem;
+}
+
+.birthplace-live-term {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.birthplace-map-meta {
+  display: flex;
+  justify-content: flex-end;
+  margin: -0.35rem 0 0.55rem;
+}
+
+.birthplace-ranking-panel .birthplace-ranking {
+  margin-top: 0.15rem;
+}
+
+.birthplace-map-count {
+  margin: 0.1rem 0 0;
+  color: #7b8494;
+  font-size: 0.82rem;
+  font-weight: 650;
+  text-align: right;
+}
+
+.birthplace-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 1rem;
+  margin: 0 0 0.7rem;
+  color: #536079;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.birthplace-map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.birthplace-map-legend i {
+  display: inline-block;
+  width: 0.72rem;
+  height: 0.72rem;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(15, 34, 71, 0.1);
+}
+
+.birthplace-map-legend .is-top-five {
+  background: #d97706;
+}
+
+.birthplace-map-legend .is-over-one-percent {
+  background: #2563eb;
+}
+
+.birthplace-map-legend .is-remaining {
+  background: #1f2937;
+}
+
+.birthplace-map {
+  width: 100%;
+  height: clamp(470px, 49vw, 590px);
+  border: 1px solid rgba(15, 34, 71, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.birthplace-map canvas,
+.birthplace-map svg {
+  opacity: 1;
+  visibility: visible;
+  filter: none;
+}
+
+.birthplace-notes {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+}
+
+.birthplace-notes p {
+  margin: 0;
+  color: #6b7588;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
 .chart-methodology ul {
   max-width: 860px;
   margin: 12px 0 0;
@@ -1670,15 +2060,10 @@ h3 {
     padding: 2rem 1.35rem;
   }
 
-  .page-intro h1 {
+  .page-title {
     max-width: 100%;
     font-size: clamp(2.8rem, 12vw, 4rem);
     line-height: 0.95;
-  }
-
-  .chart-section-title {
-    font-size: clamp(1.75rem, 8vw, 2.35rem);
-    line-height: 1.02;
   }
 
   .profession-chart {
@@ -1734,13 +2119,59 @@ h3 {
     grid-template-columns: 1fr;
   }
 
-  .education-term-tabs {
+  .term-switcher-options {
     gap: 0.45rem;
   }
 
-  .education-term-tab {
+  .term-button {
     min-width: 48px;
     padding-inline: 0.65rem;
+  }
+
+  .analysis-animation-controls .term-switcher {
+    flex-basis: 100%;
+  }
+
+  .birthplace-card {
+    padding: 18px;
+  }
+
+  .birthplace-ranking-row {
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    gap: 0.45rem 0.65rem;
+  }
+
+  .birthplace-ranking-track {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    height: 20px;
+  }
+
+  .birthplace-methodology-tooltip {
+    right: 0;
+    left: auto;
+    transform: translateY(4px);
+  }
+
+  .birthplace-methodology-info:hover .birthplace-methodology-tooltip,
+  .birthplace-methodology-info:focus-within .birthplace-methodology-tooltip,
+  .birthplace-methodology-info.is-open .birthplace-methodology-tooltip {
+    transform: translateY(0);
+  }
+
+  .birthplace-ranking-tooltip {
+    left: 2.65rem;
+    width: calc(100% - 3.4rem);
+  }
+
+  .birthplace-map-count {
+    margin-top: 0.45rem;
+    text-align: left;
+  }
+
+  .birthplace-map {
+    height: clamp(310px, 92vw, 420px);
+    min-height: 0;
   }
 
   .topic-card {

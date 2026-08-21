@@ -107,6 +107,8 @@ const donutsStatusElement = document.getElementById("professionDonutsStatus");
 const raceChartElement = document.getElementById("professionRaceChart");
 const raceStatusElement = document.getElementById("professionRaceStatus");
 const raceReplayElement = document.getElementById("professionRaceReplay");
+const raceStopElement = document.getElementById("professionRaceStop");
+const raceTermButtons = Array.from(document.querySelectorAll(".profession-race-term-button"));
 const raceTermNumberElement = document.querySelector(".profession-race-term-number");
 const raceTermYearsElement = document.querySelector(".profession-race-term-years");
 const VALUE_ANIMATION_DURATION = 3000;
@@ -526,6 +528,8 @@ async function initProfessionRace() {
     const chart = renderProfessionRaceChart(dataset);
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let animationRunId = 0;
+    let currentTargetTerm = "7";
+    let raceControls = null;
 
     if (!chart) {
       return;
@@ -535,9 +539,15 @@ async function initProfessionRace() {
 
     const play = async () => {
       const runId = ++animationRunId;
+      currentTargetTerm = "7";
+      raceControls?.setActiveTerm("7");
+      raceControls?.setPlaying(!reducedMotion);
       renderProfessionRace("7", dataset, chart, false);
       if (reducedMotion) {
-        renderProfessionRace("8", dataset, chart, false);
+        currentTargetTerm = "10";
+        raceControls?.setActiveTerm("10");
+        renderProfessionRace("10", dataset, chart, false);
+        raceControls?.setPlaying(false);
         return;
       }
 
@@ -549,6 +559,8 @@ async function initProfessionRace() {
       for (let termIndex = 1; termIndex < TERM_ORDER.length; termIndex += 1) {
         const previousTerm = TERM_ORDER[termIndex - 1];
         const nextTerm = TERM_ORDER[termIndex];
+        currentTargetTerm = nextTerm;
+        raceControls?.setActiveTerm(nextTerm);
         const order = getProfessionRaceOrder(previousTerm, dataset);
         const targetOrder = getProfessionRaceOrder(nextTerm, dataset);
         const fromValues = getProfessionRaceValues(previousTerm, order, dataset);
@@ -591,9 +603,30 @@ async function initProfessionRace() {
           return;
         }
       }
+      if (runId === animationRunId) {
+        raceControls?.setPlaying(false);
+      }
     };
 
-    raceReplayElement?.addEventListener("click", play);
+    raceControls = window.AnalysisAnimationControls?.create({
+      buttons: raceTermButtons,
+      replayButton: raceReplayElement,
+      stopButton: raceStopElement,
+      onSelect: (term) => {
+        animationRunId += 1;
+        currentTargetTerm = term;
+        renderProfessionRace(term, dataset, chart, false);
+        raceControls?.setActiveTerm(term);
+        raceControls?.setPlaying(false);
+      },
+      onStop: () => {
+        animationRunId += 1;
+        renderProfessionRace(currentTargetTerm, dataset, chart, false);
+        raceControls?.setActiveTerm(currentTargetTerm);
+        raceControls?.setPlaying(false);
+      },
+      onReplay: play,
+    });
     play();
     window.addEventListener("resize", () => chart.resize());
   } catch (error) {
