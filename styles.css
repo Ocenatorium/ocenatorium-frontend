@@ -649,6 +649,7 @@ h3 {
 
 .profession-race-current-term {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.8rem;
   margin: 8px 0 10px;
@@ -669,8 +670,10 @@ h3 {
 }
 
 .profession-race-term-years {
+  min-width: 0;
   color: #667085;
   font-size: 15px;
+  line-height: 1.45;
 }
 
 @media (prefers-reduced-motion: reduce) {

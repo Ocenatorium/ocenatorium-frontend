@@ -3,10 +3,10 @@ const WEIGHTED_CSV_PATH = "./public/data/profession_groups_web_weighted_percent_
 
 const TERM_ORDER = ["7", "8", "9", "10"];
 const TERM_META = {
-  7: { label: "VII", years: "2011–2015" },
-  8: { label: "VIII", years: "2015–2019" },
-  9: { label: "IX", years: "2019–2023" },
-  10: { label: "X", years: "2023–2027" },
+  7: { label: "VII", years: "2011–2015", government: "PO + PSL" },
+  8: { label: "VIII", years: "2015–2019", government: "PiS" },
+  9: { label: "IX", years: "2019–2023", government: "PiS" },
+  10: { label: "X", years: "2023–2027", government: "KO + Polska 2050 + PSL + Lewica" },
 };
 const GROUP_ORDER = [
   "Polityka",
@@ -314,8 +314,9 @@ function setProfessionRaceTerm(term) {
     return;
   }
 
-  raceTermNumberElement.textContent = TERM_META[term].label;
-  raceTermYearsElement.textContent = TERM_META[term].years;
+  const meta = TERM_META[term];
+  raceTermNumberElement.textContent = `${meta.label} kadencja`;
+  raceTermYearsElement.textContent = `· ${meta.years} · ${meta.government}`;
 }
 
 function getProfessionRaceRows(term, dataset) {
