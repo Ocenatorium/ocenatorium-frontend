@@ -165,6 +165,8 @@ main,
 }
 
 .hero-copy {
+  min-width: 0;
+  width: 100%;
   max-width: 500px;
 }
 
@@ -2259,8 +2261,8 @@ body.reel-mode > .site-footer {
     padding: 34px 0 24px;
   }
 
-  h1 {
-    font-size: clamp(3rem, 17vw, 4.7rem);
+  .hero h1 {
+    font-size: clamp(2.8rem, 13.5vw, 4.7rem);
   }
 
   .hero-actions,
