@@ -1,5 +1,6 @@
 const CSV_PATH = "./public/data/profession_groups_web_presence_percent_by_term.csv";
 const WEIGHTED_CSV_PATH = "./public/data/profession_groups_web_weighted_percent_by_term.csv";
+const IS_REEL_MODE = new URLSearchParams(window.location.search).get("reel") === "1";
 
 const TERM_ORDER = ["7", "8", "9", "10"];
 const TERM_META = {
@@ -117,6 +118,20 @@ const INITIAL_TERM_PAUSE = 5000;
 const READY_TERM_PAUSE = 5000;
 const FINAL_TERM_PAUSE = 5000;
 let weightedRowsPromise;
+
+const REEL_TRANSITION_MS = 3000;
+const REEL_HOLD_MS = 4000;
+const REEL_INITIAL_HOOK_MS = 2000;
+const REEL_INITIAL_REMAINDER_MS = 3000;
+const reelElement = document.getElementById("professionReel");
+const reelChartElement = document.getElementById("professionReelChart");
+const reelHookElement = document.getElementById("professionReelHook");
+const reelTermElement = document.getElementById("professionReelTerm");
+const reelTermMetaElement = document.getElementById("professionReelTermMeta");
+const reelFinalPromptElement = document.getElementById("professionReelFinalPrompt");
+const reelControlsElement = document.getElementById("professionReelControls");
+const reelPlayElement = document.getElementById("professionReelPlay");
+const reelRestartElement = document.getElementById("professionReelRestart");
 
 function showLoadingStatus(message) {
   if (!statusElement) {
@@ -307,6 +322,175 @@ function buildProfessionRaceDataset(rows) {
   dataset.raceAxisMax = Math.max(5, Math.ceil(maxValueAcrossTerms / 5) * 5);
 
   return dataset;
+}
+
+function createProfessionReelRow(group) {
+  const row = document.createElement("div");
+  row.className = "profession-reel-row";
+  row.dataset.group = group;
+  row.dataset.value = "0";
+  row.innerHTML = `
+    <span class="profession-reel-label"></span>
+    <span class="profession-reel-bar-line">
+      <span class="profession-reel-track"><span class="profession-reel-bar"></span></span>
+      <strong class="profession-reel-value">0,0%</strong>
+    </span>
+  `;
+  row.querySelector(".profession-reel-label").textContent = group;
+  row.querySelector(".profession-reel-bar").style.backgroundColor = GROUP_COLORS[group];
+  return row;
+}
+
+function animateProfessionReelValue(row, fromValue, toValue, duration, runId, getRunId) {
+  const startedAt = performance.now();
+  const valueElement = row.querySelector(".profession-reel-value");
+
+  function frame(now) {
+    if (runId !== getRunId()) {
+      return;
+    }
+    const progress = Math.min(Math.max((now - startedAt) / duration, 0), 1);
+    const eased = progress < 0.5
+      ? 2 * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+    const currentValue = fromValue + (toValue - fromValue) * eased;
+    valueElement.textContent = formatPercent(currentValue);
+    row.dataset.value = String(currentValue);
+    if (progress < 1) {
+      requestAnimationFrame(frame);
+    }
+  }
+
+  requestAnimationFrame(frame);
+}
+
+function renderProfessionReelTerm(term, dataset, options = {}) {
+  if (!reelChartElement) {
+    return;
+  }
+  const meta = TERM_META[term];
+  const rows = getProfessionRaceRows(term, dataset);
+  const duration = options.animate ? options.duration || REEL_TRANSITION_MS : 0;
+  reelTermElement.textContent = `${meta.label} kadencja`;
+  reelTermMetaElement.textContent = `${meta.years} · ${meta.government}`;
+
+  GROUP_ORDER.forEach((group) => {
+    if (!reelChartElement.querySelector(`[data-group="${group}"]`)) {
+      reelChartElement.appendChild(createProfessionReelRow(group));
+    }
+  });
+
+  const elements = new Map(
+    Array.from(reelChartElement.querySelectorAll(".profession-reel-row"))
+      .map((row) => [row.dataset.group, row]),
+  );
+  const previousRects = new Map(
+    Array.from(elements.values()).map((row) => [row, row.getBoundingClientRect()]),
+  );
+  const values = new Map(rows.map((row) => [row.group, row.value]));
+
+  rows.forEach((item, index) => {
+    elements.get(item.group).style.order = String(index);
+  });
+
+  if (!duration) {
+    rows.forEach((item) => {
+      const row = elements.get(item.group);
+      const width = Math.min((item.value / dataset.raceAxisMax) * 100, 100);
+      row.style.transform = "none";
+      row.querySelector(".profession-reel-bar").style.width = `${width}%`;
+      row.querySelector(".profession-reel-value").textContent = formatPercent(item.value);
+      row.dataset.value = String(item.value);
+    });
+    return;
+  }
+
+  Array.from(elements.values()).forEach((row) => {
+    const previousRect = previousRects.get(row);
+    const nextRect = row.getBoundingClientRect();
+    row.style.transition = "none";
+    row.style.transform = `translateY(${previousRect.top - nextRect.top}px)`;
+  });
+  reelChartElement.getBoundingClientRect();
+
+  requestAnimationFrame(() => {
+    rows.forEach((item) => {
+      const row = elements.get(item.group);
+      const fromValue = Number(row.dataset.value || 0);
+      const width = Math.min((item.value / dataset.raceAxisMax) * 100, 100);
+      row.style.transition = `transform ${duration}ms cubic-bezier(0.65, 0, 0.35, 1)`;
+      row.style.transform = "translateY(0)";
+      row.querySelector(".profession-reel-bar").style.transitionDuration = `${duration}ms`;
+      row.querySelector(".profession-reel-bar").style.width = `${width}%`;
+      animateProfessionReelValue(row, fromValue, values.get(item.group), duration, options.runId, options.getRunId);
+    });
+  });
+}
+
+async function initProfessionReel() {
+  if (!IS_REEL_MODE || !reelElement || !reelChartElement) {
+    return;
+  }
+
+  document.body.classList.add("reel-mode");
+  reelElement.hidden = false;
+
+  try {
+    const rows = await loadWeightedRows();
+    const dataset = buildProfessionRaceDataset(rows);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let runId = 0;
+
+    const play = async () => {
+      const currentRunId = ++runId;
+      window.scrollTo(0, 0);
+      reelControlsElement.classList.add("is-playing");
+      reelHookElement.textContent = "Myślisz, że większość posłów to zawodowi politycy?";
+      reelFinalPromptElement.hidden = true;
+      renderProfessionReelTerm("7", dataset);
+
+      if (reducedMotion) {
+        reelHookElement.textContent = "Jak zmieniał się zawodowy skład Sejmu?";
+        renderProfessionReelTerm("10", dataset);
+        reelFinalPromptElement.hidden = false;
+        reelControlsElement.classList.remove("is-playing");
+        return;
+      }
+
+      await wait(REEL_INITIAL_HOOK_MS);
+      if (currentRunId !== runId) return;
+      reelHookElement.textContent = "Jak zmieniał się zawodowy skład Sejmu?";
+      await wait(REEL_INITIAL_REMAINDER_MS);
+      if (currentRunId !== runId) return;
+
+      for (const term of TERM_ORDER.slice(1)) {
+        renderProfessionReelTerm(term, dataset, {
+          animate: true,
+          duration: REEL_TRANSITION_MS,
+          runId: currentRunId,
+          getRunId: () => runId,
+        });
+        await wait(REEL_TRANSITION_MS);
+        if (currentRunId !== runId) return;
+        renderProfessionReelTerm(term, dataset);
+        if (term === "10") {
+          reelFinalPromptElement.hidden = false;
+        }
+        await wait(REEL_HOLD_MS);
+        if (currentRunId !== runId) return;
+      }
+
+      reelControlsElement.classList.remove("is-playing");
+      window.scrollTo(0, 0);
+    };
+
+    reelPlayElement.addEventListener("click", play);
+    reelRestartElement.addEventListener("click", play);
+    play();
+  } catch (error) {
+    reelHookElement.textContent = `${error.message} Nie udało się załadować animacji.`;
+    reelControlsElement.classList.remove("is-playing");
+  }
 }
 
 function setProfessionRaceTerm(term) {
@@ -1211,6 +1395,10 @@ async function initProfessionChart() {
   }
 }
 
-initProfessionChart();
-initProfessionRace();
-initProfessionDonuts();
+if (IS_REEL_MODE) {
+  initProfessionReel();
+} else {
+  initProfessionChart();
+  initProfessionRace();
+  initProfessionDonuts();
+}
